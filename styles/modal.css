@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: .2s linear;
+}
+.modal{
+    display: none;
+    position: fixed;
+    z-index: 2;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+  }
+  .modal2{
+    display: block;
+    position: fixed;
+    z-index: 3;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+  }
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .form-input {
+    color: #000;
+    background: transparent;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 8px;
+    outline: none;
+    width: 40.5em;
+  }
+  .flex .form-group .form-input{
+    width: 20em;
+    margin-left: 10px;
+    padding: 8px;
+  }
+  .flex .form-group .form-group label{
+    margin-left: 10px;
+  }
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: #000;
+    position: relative;
+  }
+  
+  .form-group label {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    padding: 10px;
+    pointer-events: none;
+    transition: 0.5s;
+  }
+  .file-input {
+    font-size: 50px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+  }
+  .form-group .logo{
+    top: -16px;
+    left: 0;
+    background: #ffff padding-box;
+    padding: 5px 0 0 0;
+    color: #414141;
+    font-size: 12px;
+  }
+  .form-group input:focus ~ label,
+  .form-group input:valid ~ label {
+    top: -16px;
+    left: 0;
+    background: #ffff padding-box;
+    padding: 5px 0 0 0;
+    color: #414141;
+    font-size: 12px;
+}
+.Boton{
+    border: none;
+    background-color: #4ca7e4;
+    height: 30px;
+    width: 100px;
+    border-radius: 5px;
+    color: #ffff;
+    cursor: pointer;
+}
+.Boton:hover{
+    background-color: #176fb2;
+}
+.flex{
+    display: flex;
+    flex-direction: row;
+}
+  .modal-content, .modal-content2 {
+    background-color: #ffff;
+    margin: 3% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 800px;
+    border-radius: 10px;
+
+  }
+  .modal-content h1, .modal-content2 h1{
+    text-align: center;
+    margin-bottom: 20px;
+    
+  }
+  .modal-content form, .modal-content2 form{
+    align-items: center;
+  }
+  #close-modal-btn, #close-modal-btn2 {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  #close-modal-btn:hover,
+  #close-modal-btn:focus,  #close-modal-btn2:hover,
+  #close-modal-btn2:focus {
+    color: black;
+    text-decoration: none;
+    outline: none;
+  }

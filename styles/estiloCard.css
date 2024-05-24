@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600&display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: .2s linear;
+}
+h1{
+  text-align: center;
+  padding-top: 30px;
+}
+.container{
+  padding: 50px;
+  text-align: center;
+  background-color: #ffff;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+}
+.card {
+    width: 17em;
+    height: 22.5em;
+    background: #145990;
+    transition: 1s ease-in-out;
+    clip-path: polygon(30px 0%, 100% 0, 100% calc(100% - 30px), calc(100% - 30px) 100%, 0 100%, 0% 30px);
+    border-top-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 30px;
+  }
+  .card h1{
+    color: #ffffff;
+    text-align: center;
+    margin-top: 30px;
+  }
+  .card span {
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    display: block;
+    font-size: 1em;
+  }
+  
+  .card .info {
+    font-weight: 400;
+    color: white;
+    display: block;
+    text-align: center;
+    font-size: 0.72em;
+    margin: 1em;
+  }
+  
+  .card .img {
+    width: 4.8em;
+    height: 4.8em;
+    background: white;
+    border-radius: 15px;
+    margin: auto;
+  }
+  .card .img .add i{
+    font-size: 3em;
+    padding-left: 8px;
+    padding-top: 15px;
+  }
+  .card .img .add{
+    color: #0f2942;
+  }
+  .card .img img{
+    width: 4.5em;
+    height: 4.5em;
+  }
+  .card .share {
+    margin-top: 1em;
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+  }
+  
+  .card a {
+    color: white;
+    transition: .4s ease-in-out;
+  }
+  
+  .card a:hover {
+    color: #0f2942;
+  }
+  
+  .card button {
+    display: block;
+    margin: auto;
+    border-radius: 25px;
+    border: none;
+    font-weight: bold;
+    background: #ffffff;
+    color: rgb(0, 0, 0);
+    transition: .4s ease-in-out;
+    cursor: pointer;
+  }
+  .card .share .update{
+    margin: 0;
+    
+  }
