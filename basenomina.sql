@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-03-2024 a las 02:45:57
--- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Tiempo de generación: 25-05-2024 a las 00:21:32
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -49,7 +49,7 @@ CREATE TABLE `empleado` (
 --
 
 INSERT INTO `empleado` (`identificacion`, `nombre`, `apellido`, `tipoDocumento`, `genero`, `correo`, `fechaNacimiento`, `telefono`, `direccion`, `ciudad`, `fechaExpedicion`, `estadoCivil`, `nivelEstudio`, `nit`) VALUES
-('123213213', 'jorge', 'Martinez', 'CC', 0, 0, '2024-03-14', 2147483647, 'calle 33 # 24B - 123', 'Bogotá', '2024-03-01', 'Soltero', 'Tecnologo', '1000000000');
+('123213213', 'jorge', 'Martinez', 'CC', '0', '0', '2024-03-14', '2147483647', 'calle 33 # 24B - 123', 'Bogotá', '2024-03-01', 'Soltero', 'Tecnologo', '1000000000');
 
 -- --------------------------------------------------------
 
@@ -78,9 +78,8 @@ INSERT INTO `empresa` (`nit`, `tipoContribuyente`, `digitoVerificacion`, `nombre
 ('1000000000', 'Natural', '09', 'Claro Colombia', '3182632123', 'clarocolombia@gmail.com', 'calle 123 # 24B - 123', '../form-Data/klipartz.com.png', 2, 'claro.jpg'),
 ('1112323212', 'Natural', '12', 'Jorge Martinez', '32132132', 'jlmartinezpinto@gmail.com', 'calle 33 #24B - 123', '../form-Data/klipartz.com.png', 1232123, '../form-data/IMG_20231031_225215.pdf');
 
---
--- Índices para tablas volcadas
---
+-- --------------------------------------------------------
+
 --
 -- Estructura de tabla para la tabla `tipousuario`
 --
@@ -121,67 +120,22 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`idUsuario`, `tipoDocumento`, `nombreU`, `apellidoU`, `correoU`, `contraseña`, `codTipoUsuario`) VALUES
 ('1024582197', 'CC', 'Jorge ', 'Martinez', 'jorgelm65@gmail.com', '$2y$10$L1Sw2kIdSk6iWamn4yEcbO4bn4mAkGZYf64/EhxQC2WoSZNmmmkVO', 3),
-('1024582973', 'CC', 'Jorge', 'Luis', 'jlmartinezpinto@gmail.com', '$2y$10$Ry4phVg02Kj8tw2tnC1cOeY5TWTcmZZo1dxOuEbbBDwmVZu/K7/26', 3),
-('1111111111', 'CC', 'Jorge', 'Martinez', 'jlmartinezpinto@gmail.com', '$2y$10$oABIRDY/cSQwuEwZMvs5n.S3Fu7gohrqjtLBjNx2mVUlQ9dTWYiYa', 1),
+('1024582973', 'CC', 'Jorge', 'Luis', 'jlmartinezpinto@gmail.com', '$2y$10$eUdqOgNcjjpyr34HYuU3DOVesF6sZ1.I/zemfqxZ97x27bH9C4qNa', 3),
+('1111111111', 'CC', 'Jorge', 'Martinez', 'jlmartinezpinto@gmail.com', '$2y$10$eUdqOgNcjjpyr34HYuU3DOVesF6sZ1.I/zemfqxZ97x27bH9C4qNa', 1),
+('12345678', 'CC', 'Juan', 'Mariño', 'juanmarin@gmail.com', '$2y$10$aQnfP/b1t1GOk/dQgNTx2etsvzoU1NH2lZM7E7VdKHQwVlVPXti1u', 2),
+('123456789', 'CC', 'Juan', 'Mariño', 'juanmarino@gmail.com', '$2y$10$LwxV1yokPXNJ5emlUU8Khu2PKeezJ4HlM1GRZ4MOotb0vhL05fRA2', 1),
 ('22222222', 'CC', 'Jorge', 'Luis', 'jorgelm65@gmail.com', '$2y$10$YIAs7mqjrn1dZR2kbRMjRe7Gc3zJPlNxOXSFVFcrTmneSqmvpsTtW', 2),
-('3333333333', 'CC', 'Jorge', 'Martinez', 'jlmartinezpinto@gmail.com', '$2y$10$7OfY8j5iis38C0.Xx5gNUuiR.OEZ8JImmLXsINBoyicRmHie9x51u', 3);
+('3333333333', 'CC', 'Jorge', 'Martinez', 'jlmartinezpinto@gmail.com', '$2y$10$eUdqOgNcjjpyr34HYuU3DOVesF6sZ1.I/zemfqxZ97x27bH9C4qNa', 3);
 
 --
 -- Índices para tablas volcadas
 --
 
-
---
--- AUTO_INCREMENT de la tabla `tipousuario`
---
-ALTER TABLE `tipousuario`
-  MODIFY `codTipoUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- Indices de la tabla `empleado`
---
-ALTER TABLE `empleado`
-  ADD PRIMARY KEY (`identificacion`),
-  ADD KEY `nit` (`nit`);
-
---
--- Filtros para la tabla `usuario`
---
-ALTER TABLE `usuario`
-  ADD CONSTRAINT `usuario_ibfk_1` FOREIGN KEY (`codTipoUsuario`) REFERENCES `tipousuario` (`codTipoUsuario`);
-COMMIT;
-
---
--- Indices de la tabla `empresa`
---
-ALTER TABLE `empresa`
-  ADD PRIMARY KEY (`nit`);
-
---
--- Restricciones para tablas volcadas
---
---
--- Indices de la tabla `tipousuario`
---
-ALTER TABLE `tipousuario`
-  ADD PRIMARY KEY (`codTipoUsuario`);
-
 --
 -- Indices de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`idUsuario`),
-  ADD KEY `codTipoUsuario` (`codTipoUsuario`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- Filtros para la tabla `empleado`
---
-ALTER TABLE `empleado`
-  ADD CONSTRAINT `empleado_ibfk_2` FOREIGN KEY (`nit`) REFERENCES `empresa` (`nit`);
+  ADD PRIMARY KEY (`idUsuario`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
