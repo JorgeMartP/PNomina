@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-05-2024 a las 00:21:32
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Tiempo de generación: 31-05-2024 a las 18:21:15
+-- Versión del servidor: 10.4.28-MariaDB
+-- Versión de PHP: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -111,21 +111,24 @@ CREATE TABLE `usuario` (
   `apellidoU` varchar(20) NOT NULL,
   `correoU` varchar(50) NOT NULL,
   `contraseña` varchar(100) NOT NULL,
-  `codTipoUsuario` int(11) NOT NULL
+  `codTipoUsuario` int(11) NOT NULL,
+  `reset_token` varchar(255) DEFAULT NULL,
+  `token_expiration` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`idUsuario`, `tipoDocumento`, `nombreU`, `apellidoU`, `correoU`, `contraseña`, `codTipoUsuario`) VALUES
-('1024582197', 'CC', 'Jorge ', 'Martinez', 'jorgelm65@gmail.com', '$2y$10$L1Sw2kIdSk6iWamn4yEcbO4bn4mAkGZYf64/EhxQC2WoSZNmmmkVO', 3),
-('1024582973', 'CC', 'Jorge', 'Luis', 'jlmartinezpinto@gmail.com', '$2y$10$eUdqOgNcjjpyr34HYuU3DOVesF6sZ1.I/zemfqxZ97x27bH9C4qNa', 3),
-('1111111111', 'CC', 'Jorge', 'Martinez', 'jlmartinezpinto@gmail.com', '$2y$10$eUdqOgNcjjpyr34HYuU3DOVesF6sZ1.I/zemfqxZ97x27bH9C4qNa', 1),
-('12345678', 'CC', 'Juan', 'Mariño', 'juanmarin@gmail.com', '$2y$10$aQnfP/b1t1GOk/dQgNTx2etsvzoU1NH2lZM7E7VdKHQwVlVPXti1u', 2),
-('123456789', 'CC', 'Juan', 'Mariño', 'juanmarino@gmail.com', '$2y$10$LwxV1yokPXNJ5emlUU8Khu2PKeezJ4HlM1GRZ4MOotb0vhL05fRA2', 1),
-('22222222', 'CC', 'Jorge', 'Luis', 'jorgelm65@gmail.com', '$2y$10$YIAs7mqjrn1dZR2kbRMjRe7Gc3zJPlNxOXSFVFcrTmneSqmvpsTtW', 2),
-('3333333333', 'CC', 'Jorge', 'Martinez', 'jlmartinezpinto@gmail.com', '$2y$10$eUdqOgNcjjpyr34HYuU3DOVesF6sZ1.I/zemfqxZ97x27bH9C4qNa', 3);
+INSERT INTO `usuario` (`idUsuario`, `tipoDocumento`, `nombreU`, `apellidoU`, `correoU`, `contraseña`, `codTipoUsuario`, `reset_token`, `token_expiration`) VALUES
+('1024582197', 'CC', 'Jorge ', 'Martinez', 'jorgelm65@gmail.com', '$2y$10$L1Sw2kIdSk6iWamn4yEcbO4bn4mAkGZYf64/EhxQC2WoSZNmmmkVO', 3, NULL, NULL),
+('1024582973', 'CC', 'Jorge', 'Luis', 'jlmartinezpinto@gmail.com', '$2y$10$hgeeZYyg.trq5aiq40MrQe0VaLQlv4w/gWSdGcYnOfNzBs8sWTJ4K', 3, NULL, NULL),
+('1111111111', 'CC', 'Jorge', 'Martinez', 'jlmartinezpinto@gmail.com', '$2y$10$hgeeZYyg.trq5aiq40MrQe0VaLQlv4w/gWSdGcYnOfNzBs8sWTJ4K', 1, NULL, NULL),
+('12345678', 'CC', 'Juan', 'Mariño', 'juanmarin@gmail.com', '$2y$10$aQnfP/b1t1GOk/dQgNTx2etsvzoU1NH2lZM7E7VdKHQwVlVPXti1u', 2, NULL, NULL),
+('123456789', 'CC', 'Juan', 'Mariño', 'juanmarino@gmail.com', '$2y$10$LwxV1yokPXNJ5emlUU8Khu2PKeezJ4HlM1GRZ4MOotb0vhL05fRA2', 1, NULL, NULL),
+('12345678910', 'CC', 'Jorge', 'Martinez', 'jorgelm65@gmail.com', '$2y$10$IT2sBJemKXaY0YQz4OSXJuuIkHYqvOPqSPvoRbxy9qeeuF2ilqbMO', 2, NULL, NULL),
+('22222222', 'CC', 'Jorge', 'Luis', 'jorgelm65@gmail.com', '$2y$10$YIAs7mqjrn1dZR2kbRMjRe7Gc3zJPlNxOXSFVFcrTmneSqmvpsTtW', 2, NULL, NULL),
+('3333333333', 'CC', 'Jorge', 'Martinez', 'jlmartinezpinto@gmail.com', '$2y$10$hgeeZYyg.trq5aiq40MrQe0VaLQlv4w/gWSdGcYnOfNzBs8sWTJ4K', 3, NULL, NULL);
 
 --
 -- Índices para tablas volcadas

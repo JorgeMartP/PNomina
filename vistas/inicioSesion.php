@@ -32,7 +32,7 @@
                     </div>
                     <div class="input-field button">
                         <input type="submit" value="Iniciar Sesión" name="login" name="iniciar">
-                        <a href="recuperarContraseña.php">¿Olvido la contraseña?</a>
+                        <a href="recovery.php">¿Olvido la contraseña?</a>
                     </div>
                     <div class="input-field button">
                         <a href="../vistas/registrarse.php" class="botton">Registrarse</a>
