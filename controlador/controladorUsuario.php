@@ -13,36 +13,34 @@
 
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
-
-
     setcookie("intentos", 0, time() + 3600);
-    session_start();
-    #VERIFICAMOS QUE SI EXISTE LA VARIABLE CERRAR_SESION SI EXISTE CERRAMOS LA SESION ACTUAL Y ELIMINAMOS LAS COOKIES 
-    if (isset($_GET['cerrar_sesion'])) {
-        setcookie("cookiesRol", "jorgelm65@gmail.com", time() - 1);
-        setcookie("cookiesId", "1232323", time() - 1);
-        session_unset();
-        session_destroy();
-        header("Location: inicioSesion.php");
-        exit();
-    }
+session_start();
+#VERIFICAMOS QUE SI EXISTE LA VARIABLE CERRAR_SESION SI EXISTE CERRAMOS LA SESION ACTUAL Y ELIMINAMOS LAS COOKIES 
+if (isset($_GET['cerrar_sesion'])) {
+    setcookie("cookiesRol", "jorgelm65@gmail.com", time() - 1);
+    setcookie("cookiesId", "1232323", time() - 1);
+    session_unset();
+    session_destroy();
+    header("Location: ../vistas/inicioSesion.php");
+    exit();
+}
 
-    #VERIFICAMOS QUE ROL TIENE EL USUARIO INGRESADO Y LO ENVIAMOS A LA PAGINA DESEADA
-    function sesion($sesion)
-    {
-        switch ($sesion) {
-            case 1:
-                header("Location: ../vistas/empresa.php");
-                break;
-            case 2:
-                header("Location: ../vistas/Empresa.php");
-                break;
-            case 3:
-                header("Location: ../vistas/administrador.php");
-                break;
-            default:
-        }
+#VERIFICAMOS QUE ROL TIENE EL USUARIO INGRESADO Y LO ENVIAMOS A LA PAGINA DESEADA
+function sesion($sesion)
+{
+    switch ($sesion) {
+        case 1:
+            header("Location: ../vistas/empresa.php");
+            break;
+        case 2:
+            header("Location: ../vistas/Empresa.php");
+            break;
+        case 3:
+            header("Location: ../vistas/administrador.php");
+            break;
+        default:
     }
+}
 
     $dao = new DaoUsuarioImp();
     if (isset($_POST['correo'])) {
@@ -55,7 +53,7 @@
         function miFuncion() {
         Swal.fire({
             icon: "warning",
-            text: "Usuario no registrado. Pidele al administrador que te registre"
+            text: "Usuario no registrado. Registrese"
         })
         }
         window.onload = miFuncion;
@@ -63,38 +61,26 @@
         } else {
             if (isset($_POST["recordar"])) {
                 setcookie("cookiesRol", $traer->getCodTipoUsuario(), time() + 259200);
-                setcookie("cookiesId", $traer->getIdUsuario(), time() + 259200);
+                setcookie("cookiesId", $traer->getCorreoU(), time() + 259200);
             }
             if (password_verify($contraseña, $traer->getContraseña()) && $correo == $traer->getCorreoU()) {
-                $_SESSION['rol'] = $traer->getCodTipoUsuario();
-                $_SESSION['idUsuario'] = $traer->getContraseña();
-                sesion($_SESSION['rol']);
-                ## SI LO INGRESADO POR EL USUARIO NO COICIDEN CON LO QUE HAY EN LA BASE DE DATOS LE INFORMACION QUE LOS DATOS ESTAN INCORRECTOS
-            } else {
-                switch ($_COOKIE['intentos']) {
-                    case 0:
-                        $_COOKIE['intentos'] = 1;
-                        echo ('Tienes Dos intentos');
-                        break;
-                    case 1:
-                        $_COOKIE['intentos'] = 2;
-                        echo ('Tienes 1 intento');
-                        break;
-                    case 2:
-                        $_COOKIE['intentos'] = 3;
-                        echo ('No tiene mas intentos vuelve intentarlo mas tarde');
-                    default:
-                        break;
+                if ($traer->getCuenta_bloqueada()) {
+                    echo "Tu cuenta está bloqueada. Por favor, recupera tu contraseña.";
+                }else{
+                    $_SESSION['rol'] = $traer->getCodTipoUsuario();
+                    $_SESSION['idUsuario'] = $traer->getCorreoU();
+                    $dao->actualizarIntentos($traer->getCorreoU());
+                    sesion($_SESSION['rol']);
                 }
-                echo '<script type="text/javascript">
-            function miFuncion() {
-            Swal.fire({
-                icon: "warning",
-                text: "Contraseña o Usuario incorrectos  intente nuevamente"
-            })
-        }
-        window.onload = miFuncion;
-        </script>';
+            } else {
+                $intentos = $traer->getIntentos_fallidos();
+                $intentosT = $intentos + 1;
+                $traer->setIntentos_fallidos($intentosT);
+                if($intentosT >= 3){
+                    $dao->bloquearCuenta($traer->getCorreoU());
+                }else{
+                    $dao->aumentarIntentos($traer);
+                }
             }
         }
     }
@@ -148,7 +134,7 @@
             $expires = date("U") + 1800;
             $con = $dao->actuToken($token, $expires, $correoR);
             if ($con == true) {
-                $resetLink = "http://localhost/vistas/recuperarContraseña.php?token=" . $token;
+                $resetLink = "http://localhost/proyectoNomina/vistas/recuperarContraseña.php?token=" . $token;
                 require '../vendor/autoload.php';
 
                 $mail = new PHPMailer(true);
@@ -158,13 +144,13 @@
                     $mail->isSMTP();
                     $mail->Host = 'smtp-mail.outlook.com'; // Servidor SMTP
                     $mail->SMTPAuth = true;
-                    $mail->Username = 'sena_pruebas@outlook.com'; // Usuario SMTP
-                    $mail->Password = 'adso2024'; // Contraseña SMTP
+                    $mail->Username = 'sena_pruebas@outlook.com'; 
+                    $mail->Password = 'adso2024'; 
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                     $mail->Port = 587;
 
                     // Recipientes
-                    $mail->setFrom('sena_pruebas@outlook.com', 'Mailer');
+                    $mail->setFrom('sena_pruebas@outlook.com', 'Recuperación de contraseña');
                     $mail->addAddress($correoR);
 
                     // Contenido del correo
@@ -174,6 +160,7 @@
 
                     $mail->send();
                     echo 'El mensaje ha sido enviado';
+                    header("Location: ../vistas/inicioSesion.php");
                 } catch (Exception $e) {
                     echo "El mensaje no pudo ser enviado. Error: {$mail->ErrorInfo}";
                 }
@@ -200,6 +187,7 @@
         $tokenR = $_POST['token'];
         $newPassword = password_hash($_POST['contraseñaR'], PASSWORD_DEFAULT);
         $resulRC = $dao->verificarCod($newPassword, $tokenR);
+        header("Location: ../vistas/inicioSesion.php");
         if ($resulRC == true) {
             echo'<script type="text/javascript">
             function mostrarAlertaYRecargar() {
@@ -213,6 +201,7 @@
         window.onload = miFuncion;
         </script>
         ';
+        header("Location: ../vistas/inicioSesion.php");
         }else{
             echo '<script type="text/javascript">
             function miFuncion() {
@@ -225,7 +214,6 @@
         </script>';
         }
     }
-    include('../vistas/inicioSesion.php')
     ?>
 </body>
 

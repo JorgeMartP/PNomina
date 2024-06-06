@@ -14,8 +14,18 @@
 <body>
     <h1>Elige una Empresas</h1>
     <div class="container">
-<?php 
+<?php
 include_once('../controlador/controladorEmpresa.php');
+session_start();
+if (!isset($_SESSION['rol'])) {
+    header("Location: inicioSesion.php");
+    exit();
+}else{
+    if($_SESSION['rol'] != 2 && $_SESSION['rol'] != 1){
+        header("Location: inicioSesion.php");
+        exit();
+    }
+}
     //listar las empresas existentes en la base de datos en una card
     // Se comprueba si hay empresas para listar
     if(count($Empresas) != 0){

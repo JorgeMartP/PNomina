@@ -15,10 +15,12 @@ class DaoUsuarioImp extends Conexion implements DaoUsuario
             if ($numero_registro > 0) {
                 foreach ($stmt as $key) {
                     $e = new Usuario($key['idUsuario'], $key['tipoDocumento'], $key['nombreU'], $key['apellidoU'], $key['correoU'], $key['contraseña'], $key['codTipoUsuario']);
+                    $e->setIntentos_fallidos($key['Intentos_fallidos']);
+                    $e->setCuenta_bloqueada($key['cuenta_bloqueada']);
                     return $e;
                 }
             } else {
-                // Si no se encontraron registros, puedes retornar false o algún otro valor indicando que no se encontró nada
+                
                 return false;
             }
 
@@ -127,6 +129,34 @@ class DaoUsuarioImp extends Conexion implements DaoUsuario
             }
         } catch (PDOException $e) {
             echo($e);
+        }
+    }
+
+    public function actualizarIntentos($correoU){
+        $stmt = $this->getCnx()->prepare("UPDATE usuarios SET intentos_fallidos = 0 WHERE correoU = ?");
+        $stmt->bindParam(1, $correoU);
+        $stmt->execute();
+    }
+
+    public function bloquearCuenta($correoU){
+        try {
+            $stmt = $this->getCnx()->prepare("UPDATE usuarios SET cuenta_bloqueada = TRUE WHERE correoU = ?");
+            $stmt->bindParam(1, $correoU);
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo("error en la base de datos" . $e);
+        }
+        
+    }
+
+    public function aumentarIntentos(Usuario $e){
+        try {
+            $stmt = $this->getCnx()->prepare("UPDATE usuarios SET intentos_fallidos = ? WHERE correoU = ?");
+            $stmt->bindParam(1, $e->getIntentos_fallidos());
+            $stmt->bindParam(2, $e->getCorreoU());
+            $stmt->execute();
+        } catch (PDOException $e) {
+            echo("Error en la base de datos" . $e);
         }
     }
 }

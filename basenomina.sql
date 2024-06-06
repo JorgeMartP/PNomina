@@ -76,7 +76,7 @@ CREATE TABLE `empresa` (
 
 INSERT INTO `empresa` (`nit`, `tipoContribuyente`, `digitoVerificacion`, `nombre`, `telefono`, `correo`, `direccion`, `logo`, `rut`, `camaraComercio`) VALUES
 ('1000000000', 'Natural', '09', 'Claro Colombia', '3182632123', 'clarocolombia@gmail.com', 'calle 123 # 24B - 123', '../form-Data/klipartz.com.png', 2, 'claro.jpg'),
-('1112323212', 'Natural', '12', 'Jorge Martinez', '32132132', 'jlmartinezpinto@gmail.com', 'calle 33 #24B - 123', '../form-Data/klipartz.com.png', 1232123, '../form-data/IMG_20231031_225215.pdf');
+('1112323212', 'Natural', '12', 'Jorge Martinez', '32132132', 'jlmartinezpinto@gmail.com', 'calle 33 # 24B - 123', '../form-Data/klipartz.com.png', 1232123, '../form-data/IMG_20231031_225215.pdf');
 
 -- --------------------------------------------------------
 

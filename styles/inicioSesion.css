@@ -91,7 +91,7 @@ body{
     display: none;
 }
 
-.input-field input, .input-field select{
+.input-field input, .input-field select {
     height: 100%;
     width: 100%;
     padding: 0 35px;
@@ -100,13 +100,14 @@ body{
     border-bottom: 2px solid #ccc;
     border-top: 2px solid transparent;
 }
+
+.input-field input:focus, .input-field select:focus {
+    border-bottom-color: #669801;
+}
 .input-field select option{
     color: #999;
 }
 
-.input-field input:is(:focus, :valid), .input-field select:is(:focus, :valid){
-    border-bottom-color:#669801;
-}
 
 .input-field i{
     position: absolute;
@@ -117,8 +118,8 @@ body{
     transition: all .2s ease;
 }
 
-.input-field input:is(:focus, :valid) ~ i, .input-field select:is(:focus, :valid) ~ i{
-    color:#669801;
+.input-field input:focus  ~ i , .input-field select:focus  ~ i{
+    border-bottom-color: #669801;
 }
 
 .input-field i.icon{

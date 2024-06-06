@@ -8,6 +8,9 @@ class Usuario {
     private $contraseña;
     private $codTipoUsuario;
 
+    private $intentos_fallidos;
+    private $cuenta_bloqueada;
+
      public function __construct($idUsuario, $tipoDocumento, $nombreU, $apellidoU, $correoU, $contraseña, $codTipoUsuario) {
         $this->idUsuario = $idUsuario;
         $this->tipoDocumento = $tipoDocumento;
@@ -25,7 +28,22 @@ class Usuario {
         $this->idUsuario = $idUsuario;
     }
 
-    // Getter y Setter para tipoDocumento
+    public function setIntentos_fallidos($intentos_fallidos){
+        $this->intentos_fallidos = $intentos_fallidos;
+    }
+
+    public function getIntentos_fallidos(){
+        return $this->intentos_fallidos;
+    }
+
+    public function setCuenta_bloqueada($cuenta_bloqueada){
+        $this->cuenta_bloqueada = $cuenta_bloqueada;
+    }
+
+    public function getCuenta_bloqueada(){
+        return $this->cuenta_bloqueada;
+    }
+
     public function getTipoDocumento() {
         return $this->tipoDocumento;
     }
