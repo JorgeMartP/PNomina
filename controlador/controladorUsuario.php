@@ -33,7 +33,7 @@ function sesion($sesion)
             header("Location: ../vistas/empresa.php");
             break;
         case 2:
-            header("Location: ../vistas/Empresa.php");
+            header("Location: ../vistas/empresa.php");
             break;
         case 3:
             header("Location: ../vistas/administrador.php");
@@ -49,24 +49,21 @@ function sesion($sesion)
         $traer = $dao->traer($correo);
 
         if ($traer == false) {
-            echo '<script type="text/javascript">
-        function miFuncion() {
-        Swal.fire({
-            icon: "warning",
-            text: "Usuario no registrado. Registrese"
-        })
-        }
-        window.onload = miFuncion;
-        </script>';
+            
+            $massaje = "Usuario no registrado. Registrese";
+            $_SESSION['mensaje'] = $massaje;
+            header("Location: ../vistas/inicioSesion.php");
         } else {
-            if (isset($_POST["recordar"])) {
-                setcookie("cookiesRol", $traer->getCodTipoUsuario(), time() + 259200);
-                setcookie("cookiesId", $traer->getCorreoU(), time() + 259200);
-            }
             if (password_verify($contraseña, $traer->getContraseña()) && $correo == $traer->getCorreoU()) {
                 if ($traer->getCuenta_bloqueada()) {
-                    echo "Tu cuenta está bloqueada. Por favor, recupera tu contraseña.";
+                    $massaje = "Tu cuenta está bloqueada. Por favor, recupera tu contraseña.";
+                    $_SESSION['mensaje'] = $massaje;
+                    header("Location: ../vistas/inicioSesion.php");
                 }else{
+                    if (isset($_POST["recordar"])) {
+                        setcookie("cookiesRol", $traer->getCodTipoUsuario(), time() + 259200);
+                        setcookie("cookiesId", $traer->getCorreoU(), time() + 259200);
+                    }
                     $_SESSION['rol'] = $traer->getCodTipoUsuario();
                     $_SESSION['idUsuario'] = $traer->getCorreoU();
                     $dao->actualizarIntentos($traer->getCorreoU());
@@ -111,29 +108,21 @@ function sesion($sesion)
         $usuario = new Usuario($numDoc, $tipoIdent, $nombre, $apellido, $correo, $password_hasheada, $tipoUsu);
         $confir = $dao->confirCorreo($correo);
         if ($confir == false) {
-            echo '<script type="text/javascript">
-            function miFuncion() {
-            Swal.fire({
-                icon: "warning",
-                text: "Usuario ya registrado, ¡Inicie Sesión!"
-            })
-        }
-        window.onload = miFuncion;
-        </script>';
+            $massaje = "Usuario registrado correctamente. Por favor, inicie sesión.";
+            $_SESSION['mensaje'] = $massaje;
+            header("Location: ../vistas/inicioSesion.php");
         } else {
             $respuesta = $dao->crear($usuario);
             if ($respuesta == true) {
+                $massaje = "Usuario registrado correctamente. Por favor, inicie sesión.";
+                $_SESSION['mensaje'] = $massaje;
                 header("Location: ../vistas/inicioSesion.php");
             } else {
-                echo '<script type="text/javascript">
-            function miFuncion() {
-            Swal.fire({
-                icon: "warning",
-                text: "Usuario ya registrado, ¡Inicie Sesión!"
-            })
-        }
-        window.onload = miFuncion;
-        </script>';
+                
+                $massaje = "Usuario ya registrado, ¡Inicie Sesión!.";
+                $_SESSION['mensaje'] = $massaje;
+                header("Location: ../vistas/inicioSesion.php");
+                
             }
         }
     }
@@ -181,17 +170,9 @@ function sesion($sesion)
                 echo ("Correo Errado");
             }
         } else {
-            echo '<script type="text/javascript">
-            function miFuncion() {
-            Swal.fire({
-                icon: "warning",
-                text: "Usuario no registrado, ¡Por favor Registrese!"
-            }).then(() => {
-                window.location.href = "../vistas/registrarse.php"; 
-            });
-        }
-        window.onload = miFuncion;
-        </script>';
+            $mensaje = "Correo Incorrecto vuelve a Intentar";
+            $_SESSION['mensaje2'] = $mensaje;
+            header("Location: ../vistas/recovery.php");
         }
     }
 
@@ -205,15 +186,10 @@ function sesion($sesion)
             $_SESSION['mensaje'] = $massaje;
             header("Location: ../vistas/inicioSesion.php");
         }else{
-            echo '<script type="text/javascript">
-            function miFuncion() {
-            Swal.fire({
-                icon: "warning",
-                text: "El token es inválido o ha expirado."
-            })
-        }
-        window.onload = miFuncion;
-        </script>';
+            
+            $massaje = "El token es inválido o ha expirado. Por favor, solicita el correo nuevamente.";
+            $_SESSION['mensaje'] = $massaje;
+            header("Location: ../vistas/recovery.php");
         }
     }
     ?>

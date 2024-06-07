@@ -31,6 +31,18 @@ function sesion2($sesion)
         default:
     }
 }
+
+if (isset($_SESSION["rol"]) || isset($_COOKIE["cookiesRol"])) {
+    if(isset($_SESSION["rol"])){
+        $rol = $_SESSION["rol"];
+        sesion($rol);
+    }else{
+        $_SESSION['rol'] = $_COOKIE['cookiesRol'];
+        $_SESSION['idUsuario'] = $_COOKIE['cookiesId'];
+        $rolC = $_COOKIE['cookiesRol'];
+        sesion($rolC);
+    }
+}
 ?>
 <body>
     <div class="container">
@@ -67,8 +79,9 @@ function sesion2($sesion)
                     </div>
                     <div class="input-field button">
                         <input type="submit" value="Iniciar Sesión" name="login" name="iniciar">
-                        <a href="recovery.php">¿Olvido la contraseña?</a>
                     </div>
+                    <br>
+                        <a href="recovery.php">¿Olvido la contraseña?</a>
                     <div class="input-field button">
                         <a href="../vistas/registrarse.php" class="botton" >Registrarse</a>
                     </div>
