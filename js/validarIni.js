@@ -1,7 +1,7 @@
 function validate(){
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
-
+    console.log(email);
     let emptyFields = [];
     if (!email) emptyFields.push("Correo Electrónico");
     if (!password) emptyFields.push("Contraseña");
@@ -21,4 +21,8 @@ function validate(){
       }
     
       return true;
+}
+function validateEmail(email) {
+  const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return re.test(email);
 }

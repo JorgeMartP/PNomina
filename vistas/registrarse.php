@@ -10,6 +10,8 @@
     
 </head>
 <?php
+session_start();
+
 if(isset($_SESSION["rol"])){
     echo($_SESSION["rol"]);
     sesion2($_SESSION["rol"]);
@@ -30,6 +32,18 @@ function sesion2($sesion)
         default:
     }
 }
+
+if (isset($_SESSION["rol"]) || isset($_COOKIE["cookiesRol"])) {
+    if(isset($_SESSION["rol"])){
+        $rol = $_SESSION["rol"];
+        sesion2($rol);
+    }else{
+        $_SESSION['rol'] = $_COOKIE['cookiesRol'];
+        $_SESSION['idUsuario'] = $_COOKIE['cookiesId'];
+        $rolC = $_COOKIE['cookiesRol'];
+        sesion2($rolC);
+    }
+}
 ?>
 <body>
     <div class="form signup">
@@ -37,7 +51,7 @@ function sesion2($sesion)
         <form action="../controlador/controladorUsuario.php" method="post" onsubmit="return validateFormR()">
             <div id="alert-div"></div>
             <div class="input-field">
-                <input type="number" placeholder="N° Identificación" name="numIdentificacion" id="num">
+                <input type="text" placeholder="N° Identificación" name="numIdentificacion" id="num">
                 <i class='bx bxs-id-card icon'></i>
             </div>
             <div class="input-field">
@@ -58,7 +72,7 @@ function sesion2($sesion)
                 <i class='bx bx-user icon'></i>
             </div>
             <div class="input-field">
-                <input type="email" placeholder="Correo Electronico" id="email" name="emailR">
+                <input type="text" placeholder="Correo Electronico" id="email" name="emailR">
                 <i class='bx bx-envelope icon'></i>
             </div>
             <div class="input-field">

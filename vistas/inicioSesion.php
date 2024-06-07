@@ -15,7 +15,6 @@ include_once("../controlador/controladorUsuario.php");
 if(isset($_SESSION["rol"])){
     sesion2($_SESSION["rol"]);
 }
-
 function sesion2($sesion)
 {
     switch ($sesion) {
@@ -32,17 +31,18 @@ function sesion2($sesion)
     }
 }
 
-if (isset($_SESSION["rol"]) || isset($_COOKIE["cookiesRol"])) {
-    if(isset($_SESSION["rol"])){
-        $rol = $_SESSION["rol"];
-        sesion($rol);
-    }else{
-        $_SESSION['rol'] = $_COOKIE['cookiesRol'];
-        $_SESSION['idUsuario'] = $_COOKIE['cookiesId'];
-        $rolC = $_COOKIE['cookiesRol'];
-        sesion($rolC);
+if (isset($_SESSION["rol"])) {
+    $rol = intval($_SESSION["rol"]); // Convertir a entero
+    sesion2($rol);
+} elseif (isset($_COOKIE["cookiesrol"])) {
+    // Evitar iniciar sesión automáticamente si la sesión ya se ha cerrado
+    if (!isset($_GET['cerrar_sesion'])) {
+        $rolC = intval($_COOKIE["cookiesrol"]); // Convertir a entero
+        $_SESSION['rol'] = $rolC;
+        sesion2($rolC);
     }
 }
+
 ?>
 <body>
     <div class="container">
@@ -58,24 +58,22 @@ if (isset($_SESSION["rol"]) || isset($_COOKIE["cookiesRol"])) {
                     unset($_SESSION["mensaje"]);
                 }
                 ?>
-                <div class="alert-div">
+                <div class="alert-div" id="alert-div">
                 </div>
                 <form action="../controlador/controladorUsuario.php" method="post" onsubmit="return validate()">
                     <div class="input-field">
-                        <input type="email" placeholder="Correo Electronico" name="correo"  required>
+                        <input type="text" placeholder="Correo Electronico" name="correo" id="email">
                         <i class='bx bxs-id-card icon'></i>
                     </div>
                     <div class="input-field">
-                        <input type="password" placeholder="Contraseña" name="contraseña_Login" class="password" required>
+                        <input type="password" placeholder="Contraseña" name="contraseña_Login" class="password" id="password" >
                         <i class='bx bx-lock-alt icon' id="icon"></i>
                         <i class='bx bx-hide showHipePw' id="icon2"></i>
                     </div>
                     <div class="checkbox-text">
                         <div class="checkbox-content">
                             <input type="checkbox" name="recordar" id="logCheck">
-                            <label for="logCheck" class="text">¿Recordar Usuario?</label>  
-                        </div>
-                        
+                            <label for="logCheck" class="text">¿Recordar Usuario?</label>
                     </div>
                     <div class="input-field button">
                         <input type="submit" value="Iniciar Sesión" name="login" name="iniciar">

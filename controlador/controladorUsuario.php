@@ -47,7 +47,11 @@ function sesion($sesion)
         $correo = $_POST['correo'];
         $contraseña = $_POST['contraseña_Login'];
         $traer = $dao->traer($correo);
-
+        echo($_POST['recordar']);
+        if (isset($_POST["recordar"])) {
+            setcookie("cookiesrol", $traer->getCodTipoUsuario(), time() + 259200, "/", ".localhost", true, true);
+            setcookie("cookiesid", $traer->getCorreoU(), time() + 259200, "/", ".localhost", true, true);
+        }
         if ($traer == false) {
             
             $massaje = "Usuario no registrado. Registrese";
@@ -60,10 +64,7 @@ function sesion($sesion)
                     $_SESSION['mensaje'] = $massaje;
                     header("Location: ../vistas/inicioSesion.php");
                 }else{
-                    if (isset($_POST["recordar"])) {
-                        setcookie("cookiesRol", $traer->getCodTipoUsuario(), time() + 259200);
-                        setcookie("cookiesId", $traer->getCorreoU(), time() + 259200);
-                    }
+                    
                     $_SESSION['rol'] = $traer->getCodTipoUsuario();
                     $_SESSION['idUsuario'] = $traer->getCorreoU();
                     $dao->actualizarIntentos($traer->getCorreoU());
@@ -84,7 +85,7 @@ function sesion($sesion)
                 }else{
                     $respuesta2 =  $dao->aumentarIntentos($traer);
                     if($respuesta2 == true){
-                        $mensaje = "Contraseña incorrecta, Tienes " . $intentosRes . " Restantes";
+                        $mensaje = "Contraseña incorrecta, Tienes " . $intentosRes . " Restantes". $_POST['recordar'] . $_COOKIE['cookiesRol'];
                         $_SESSION['mensaje'] = $mensaje;
                         header("Location: ../vistas/inicioSesion.php");
                     }
@@ -192,6 +193,9 @@ function sesion($sesion)
             header("Location: ../vistas/recovery.php");
         }
     }
+
+    #Traer los usuario 
+
     ?>
 </body>
 

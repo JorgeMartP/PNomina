@@ -12,21 +12,23 @@ function validateFormR() {
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value.trim();
     const tipoUsu = document.getElementById("tipoUsu").value;
-  
     let emptyFields = [];
   
     if (!identificacion) emptyFields.push("N° Identificación");
+    if(/[a-z A-Z]/.test(identificacion)) emptyFields.push("El documento no debe incluir Letras")
     if (!tipoIdent) emptyFields.push("Tipo de Documento");
+    if (/^[0-9]*$/.test(names)) emptyFields.push("El nombre no debe incluir numeros");
     if (!names) emptyFields.push("Nombre");
     if (!lastname) emptyFields.push("Apellidos");
+    if (/^[0-9]*$/.test(lastname)) emptyFields.push("El apellido no debe incluir numeros");
     if (!email) emptyFields.push("Correo Electrónico");
     if (!password) emptyFields.push("Contraseña");
     if (!tipoUsu) emptyFields.push("Tipo de Usuario");
-  
+
     if (email && !validateEmail(email)) {
       emptyFields.push("Formato de Correo Electrónico inválido");
     }
-  
+
     const passwordRequirements = [];
     if (password.length < 8) passwordRequirements.push("Al menos 8 caracteres");
     if (!/\d/.test(password)) passwordRequirements.push("Al menos un número");

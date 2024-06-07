@@ -163,4 +163,22 @@ class DaoUsuarioImp extends Conexion implements DaoUsuario
             echo("Error en la base de datos" . $e);
         }
     }
+
+    public function traerUsuario(Usuario $e){
+        try {
+            $stmt = $this->getCnx()->prepare("SELECT * FROM usuario");
+            $stmt->execute();
+            $numero_registro = $stmt->rowCount();
+            if ($numero_registro > 0) {
+                foreach ($stmt as $key) {
+                    $e = new Usuario($key['idUsuario'], $key['tipoDocumento'], $key['nombreU'], $key['apellidoU'], $key['correoU'], $key['contraseña'], $key['codTipoUsuario']);
+                    return $e;
+                }
+            } else {
+                return false;
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+    }
 }
