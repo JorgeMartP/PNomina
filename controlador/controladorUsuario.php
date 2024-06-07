@@ -41,7 +41,7 @@ function sesion($sesion)
         default:
     }
 }
-
+## Inicio de Sesión 
     $dao = new DaoUsuarioImp();
     if (isset($_POST['correo'])) {
         $correo = $_POST['correo'];
@@ -75,11 +75,23 @@ function sesion($sesion)
             } else {
                 $intentos = $traer->getIntentos_fallidos();
                 $intentosT = $intentos + 1;
+                $intentosRes = 3 - $intentosT;
                 $traer->setIntentos_fallidos($intentosT);
                 if($intentosT >= 3){
-                    $dao->bloquearCuenta($traer->getCorreoU());
+                    $respuestas = $dao->bloquearCuenta($traer->getCorreoU());
+                    if($respuestas == true){
+                        $mensaje = "Cuenta Bloqueada por favor Cambie la contraseña";
+                        $_SESSION['mensaje2'] = $mensaje;
+                        header("Location: ../vistas/recovery.php");
+                    }
                 }else{
-                    $dao->aumentarIntentos($traer);
+                    $respuesta2 =  $dao->aumentarIntentos($traer);
+                    if($respuesta2 == true){
+                        $mensaje = "Contraseña incorrecta, Tienes " . $intentosRes . " Restantes";
+                        $_SESSION['mensaje'] = $mensaje;
+                        header("Location: ../vistas/inicioSesion.php");
+                    }
+                    
                 }
             }
         }
@@ -150,16 +162,17 @@ function sesion($sesion)
                     $mail->Port = 587;
 
                     // Recipientes
-                    $mail->setFrom('sena_pruebas@outlook.com', 'Recuperación de contraseña');
+                    $mail->setFrom('sena_pruebas@outlook.com', 'PayRoll');
                     $mail->addAddress($correoR);
 
                     // Contenido del correo
                     $mail->isHTML(true);
                     $mail->Subject = 'Recuperación de Contraseña';
-                    $mail->Body = "Haga clic en el siguiente enlace para restablecer su contraseña: <a href='$resetLink'>$resetLink</a>";
+                    $mail->Body = "Haga clic en el siguiente enlace para restablecer su contraseña: <a href='$resetLink'>click Aqui</a>";
 
                     $mail->send();
-                    echo 'El mensaje ha sido enviado';
+                    $mess = "Hemos enviado un correo a su dirección. Por favor, revise su bandeja de entrada o carpeta de spam.";
+                    $_SESSION['mensaje'] = $mess;
                     header("Location: ../vistas/inicioSesion.php");
                 } catch (Exception $e) {
                     echo "El mensaje no pudo ser enviado. Error: {$mail->ErrorInfo}";
@@ -187,21 +200,10 @@ function sesion($sesion)
         $tokenR = $_POST['token'];
         $newPassword = password_hash($_POST['contraseñaR'], PASSWORD_DEFAULT);
         $resulRC = $dao->verificarCod($newPassword, $tokenR);
-        header("Location: ../vistas/inicioSesion.php");
         if ($resulRC == true) {
-            echo'<script type="text/javascript">
-            function mostrarAlertaYRecargar() {
-            Swal.fire({
-                icon: "success",
-                text: "Su contraseña ha sido actualizada."
-        }).then(() => {
-            window.location.href = "../vistas/inicioSesion.php"; 
-        });
-        }
-        window.onload = miFuncion;
-        </script>
-        ';
-        header("Location: ../vistas/inicioSesion.php");
+            $massaje = "Su contraseña ha sido actualizada.";
+            $_SESSION['mensaje'] = $massaje;
+            header("Location: ../vistas/inicioSesion.php");
         }else{
             echo '<script type="text/javascript">
             function miFuncion() {

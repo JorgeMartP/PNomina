@@ -15,7 +15,7 @@ class DaoUsuarioImp extends Conexion implements DaoUsuario
             if ($numero_registro > 0) {
                 foreach ($stmt as $key) {
                     $e = new Usuario($key['idUsuario'], $key['tipoDocumento'], $key['nombreU'], $key['apellidoU'], $key['correoU'], $key['contraseña'], $key['codTipoUsuario']);
-                    $e->setIntentos_fallidos($key['Intentos_fallidos']);
+                    $e->setIntentos_fallidos($key['intentos_fallidos']);
                     $e->setCuenta_bloqueada($key['cuenta_bloqueada']);
                     return $e;
                 }
@@ -119,7 +119,7 @@ class DaoUsuarioImp extends Conexion implements DaoUsuario
 
             if ($result >= 1) {
                 // Actualizar la contraseña
-                $stmt = $this->getCnx()->prepare("UPDATE usuario SET contraseña = ?, reset_token = NULL, token_expiration = NULL WHERE reset_token = ?");
+                $stmt = $this->getCnx()->prepare("UPDATE usuario SET contraseña = ?, reset_token = NULL, token_expiration = NULL, cuenta_bloqueada = FALSE, intentos_fallidos = 0  WHERE reset_token = ?");
                 $stmt->bindParam(1, $newPassword);
                 $stmt->bindParam(2, $token);
                 $stmt->execute();
@@ -133,16 +133,17 @@ class DaoUsuarioImp extends Conexion implements DaoUsuario
     }
 
     public function actualizarIntentos($correoU){
-        $stmt = $this->getCnx()->prepare("UPDATE usuarios SET intentos_fallidos = 0 WHERE correoU = ?");
+        $stmt = $this->getCnx()->prepare("UPDATE usuario SET intentos_fallidos = 0 WHERE correoU = ?");
         $stmt->bindParam(1, $correoU);
         $stmt->execute();
     }
 
     public function bloquearCuenta($correoU){
         try {
-            $stmt = $this->getCnx()->prepare("UPDATE usuarios SET cuenta_bloqueada = TRUE WHERE correoU = ?");
+            $stmt = $this->getCnx()->prepare("UPDATE usuario SET cuenta_bloqueada = TRUE WHERE correoU = ?");
             $stmt->bindParam(1, $correoU);
             $stmt->execute();
+            return $stmt;
         } catch (PDOException $e) {
             echo("error en la base de datos" . $e);
         }
@@ -151,10 +152,13 @@ class DaoUsuarioImp extends Conexion implements DaoUsuario
 
     public function aumentarIntentos(Usuario $e){
         try {
-            $stmt = $this->getCnx()->prepare("UPDATE usuarios SET intentos_fallidos = ? WHERE correoU = ?");
-            $stmt->bindParam(1, $e->getIntentos_fallidos());
-            $stmt->bindParam(2, $e->getCorreoU());
+            $stmt = $this->getCnx()->prepare("UPDATE usuario SET intentos_fallidos = ? WHERE correoU = ?");
+            $intentos_fallidos = $e->getIntentos_fallidos();
+            $correo = $e->getCorreoU();
+            $stmt->bindParam(1, $intentos_fallidos);
+            $stmt->bindParam(2, $correo);
             $stmt->execute();
+            return $stmt;
         } catch (PDOException $e) {
             echo("Error en la base de datos" . $e);
         }
