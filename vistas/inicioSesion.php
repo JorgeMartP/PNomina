@@ -73,7 +73,7 @@ if (isset($_SESSION["rol"])) {
                     <div class="checkbox-text">
                         <div class="checkbox-content">
                             <input type="checkbox" name="recordar" id="logCheck">
-                            <label for="logCheck" class="text">¿Recordar Usuario?</label>
+                            <label for="logCheck" class="text">¿Mantener Sesión Iniciada?</label>
                     </div>
                     <div class="input-field button">
                         <input type="submit" value="Iniciar Sesión" name="login" name="iniciar">

@@ -28,6 +28,18 @@ function sesion2($sesion)
         default:
     }
 }
+
+if (isset($_SESSION["rol"])) {
+    $rol = intval($_SESSION["rol"]); // Convertir a entero
+    sesion2($rol);
+} elseif (isset($_COOKIE["cookiesrol"])) {
+    // Evitar iniciar sesión automáticamente si la sesión ya se ha cerrado
+    if (!isset($_GET['cerrar_sesion'])) {
+        $rolC = intval($_COOKIE["cookiesrol"]); // Convertir a entero
+        $_SESSION['rol'] = $rolC;
+        sesion2($rolC);
+    }
+}
 ?>
 <body>
 <div class="container">
@@ -54,6 +66,9 @@ function sesion2($sesion)
                     </div>
                     <div class="input-field button">
                         <a href="../vistas/registrarse.php" class="botton">Registrarse</a>
+                    </div>
+                    <div class="input-field button">
+                        <a href="../vistas/inicioSesion.php" class="botton">Iniciar Sesión</a>
                     </div>
                 </form>
             </div>

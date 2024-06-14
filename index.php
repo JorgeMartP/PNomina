@@ -11,18 +11,28 @@ if(isset($_SESSION["rol"])){
     echo($_SESSION["rol"]);
     sesion2($_SESSION["rol"]);
 }
-
+if (isset($_SESSION["rol"])) {
+    $rol = intval($_SESSION["rol"]); // Convertir a entero
+    sesion2($rol);
+} elseif (isset($_COOKIE["cookiesrol"])) {
+    // Evitar iniciar sesión automáticamente si la sesión ya se ha cerrado
+    if (!isset($_GET['cerrar_sesion'])) {
+        $rolC = intval($_COOKIE["cookiesrol"]); // Convertir a entero
+        $_SESSION['rol'] = $rolC;
+        sesion2($rolC);
+    }
+}
 function sesion2($sesion)
 {
     switch ($sesion) {
         case 1:
-            header("Location: ../vistas/empresa.php");
+            header("Location: ./vistas/empresa.php");
             break;
         case 2:
-            header("Location: ../vistas/Empresa.php");
+            header("Location: ./vistas/Empresa.php");
             break;
         case 3:
-            header("Location: ../vistas/administrador.php");
+            header("Location: ./vistas/administrador.php");
             break;
         default:
     }

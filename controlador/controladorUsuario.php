@@ -15,9 +15,9 @@
     use PHPMailer\PHPMailer\Exception;
     setcookie("intentos", 0, time() + 3600);
 session_start();
-#VERIFICAMOS QUE SI EXISTE LA VARIABLE CERRAR_SESION SI EXISTE CERRAMOS LA SESION ACTUAL Y ELIMINAMOS LAS COOKIES 
+#VERIFICAMOS QUE SI EXISTE LA VARIABLE CERRAR_SESION SI EXISTE CERRAMOS LA SESION ACTUAL Y ELIMINAMOS LAS COOKIES
 if (isset($_GET['cerrar_sesion'])) {
-    setcookie("cookiesrol", "", time() - 2592000, '/'); // Tiempo en el pasado para eliminar la cookie
+    setcookie("cookiesrol", "", time() - 2592000, '/');
     setcookie("cookiesid", "", time() - 2592000, '/');
     session_unset();
     session_destroy();
@@ -41,15 +41,10 @@ function sesion($sesion)
         default:
     }
 }
-## Inicio de Sesión 
+## Inicio de Sesión
 function iniciarSesion($correo, $contraseña, $recordar) {
     $dao = new DaoUsuarioImp();
     $traer = $dao->traer($correo);
-
-    if ($recordar) {
-        setcookie("cookiesrol", $traer->getCodTipoUsuario(), time() + 259200, "/", ".localhost", true, true);
-        setcookie("cookiesid", $traer->getCorreoU(), time() + 259200, "/", ".localhost", true, true);
-    }
 
     if (!$traer) {
         $_SESSION['mensaje'] = "Usuario no registrado. Registrese";
@@ -60,6 +55,10 @@ function iniciarSesion($correo, $contraseña, $recordar) {
                 $_SESSION['mensaje'] = "Tu cuenta está bloqueada. Por favor, recupera tu contraseña.";
                 header("Location: ../vistas/inicioSesion.php");
             } else {
+                if ($recordar) {
+                    setcookie("cookiesrol", $traer->getCodTipoUsuario(), time() + 259200, "/", ".localhost", true, true);
+                    setcookie("cookiesid", $traer->getCorreoU(), time() + 259200, "/", ".localhost", true, true);
+                }
                 $_SESSION['rol'] = $traer->getCodTipoUsuario();
                 $_SESSION['idUsuario'] = $traer->getCorreoU();
                 $dao->actualizarIntentos($traer->getCorreoU());
@@ -80,7 +79,7 @@ function manejarIntentosFallidos($traer) {
 
     if ($intentosT >= 3) {
         if ($dao->bloquearCuenta($traer->getCorreoU())) {
-            $_SESSION['mensaje2'] = "Cuenta Bloqueada por favor Cambie la contraseña";
+            $_SESSION['mensaje'] = "Cuenta Bloqueada por favor Cambie la contraseña";
             header("Location: ../vistas/inicioSesion.php");
         }
     } else {
@@ -166,7 +165,7 @@ function recuperarContraseña($tokenR, $nuevaContraseña) {
         header("Location: ../vistas/inicioSesion.php");
     } else {
         $_SESSION['mensaje'] = "El token es inválido o ha expirado. Por favor, solicita el correo nuevamente.";
-        header("Location: ../vistas/recovery.php");
+        header("Location: ../vistas/inicioSesion.php");
     }
 }
 
