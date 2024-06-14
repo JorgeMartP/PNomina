@@ -23,7 +23,7 @@ if (!isset($_SESSION['rol'])) {
     header("Location: inicioSesion.php");
     exit();
 }else{
-    if($_SESSION['rol'] == 1 || $_SESSION['rol'] == 3 ){
+    if($_SESSION['rol'] == 3 ){
         header("Location: inicioSesion.php");
         exit();
     }

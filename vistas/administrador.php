@@ -51,7 +51,7 @@ if (!isset($_SESSION['rol'])) {
         </a>
       </div>
     </div>
-    <a href="../vistas/logout.php">cerrar sesión</a>
+    <a href="../controlador/controladorUsuario.php?cerrar_sesion=true">cerrar sesión</a>
     <label id="icon">
       <i class="bx bx-menu"></i>
     </label>
