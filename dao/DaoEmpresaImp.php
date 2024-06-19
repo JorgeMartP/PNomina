@@ -7,36 +7,44 @@ class DaoEmpresaImp extends Conexion implements DaoEmpresa
 {
     // Método para registrar una empresa en la base de datos
     public function registrar(Empresa $e)
-    {
-        try {
-            // Verificar si la conexión no es nula
-            if ($this->getCnx() != null) {
-                // Obtener los atributos de la empresa
-                $nit = $e->getNit();
-                $nombre = $e->getNombreEmpresa();
-                $direccion = $e->getDireccionEmpresa();
-                $telefono = $e->getTelefonoEmpresa();
-                $correo = $e->getCorreoEmpresa();
-                $tipoContribuyente = $e->getTipoContribuyente();
-                $digitoVerificacion = $e->getDigitoVerificacion();
-                $rut = $e->getRut();
-                $logo = $e->getLogo();
-                $camaraComercio = $e->getCamaraComercio();
-                // Consulta SQL para insertar la empresa en la base de datos
-                $sql = "insert into empresa values(?,?,?,?,?,?,?,?,?,?)";
-                // Preparar la consulta SQL
-                $stmt = $this->getCnx()->prepare($sql);
-                // Ejecutar la consulta con los parámetros proporcionados
-                $stmt->execute([$nit, $tipoContribuyente, $digitoVerificacion, $nombre, $telefono, $correo,  $direccion, $logo, $rut, $camaraComercio]);
-                return true;
-            } else {
-                // Mensaje de error si la conexión es nula
-                echo $this->getCnx() . ' Es nulo <br>';
-            }
-        } catch (PDOException $p) {
+{
+    try {
+        // Verificar si la conexión no es nula
+        if ($this->getCnx() != null) {
+            // Obtener los atributos de la empresa
+            $nit = $e->getNit();
+            $tipoContribuyente = $e->getTipoContribuyente();
+            $digitoVerificacion = $e->getDigitoVerificacion();
+            $nombre = $e->getNombreEmpresa();
+            $telefono = $e->getTelefonoEmpresa();
+            $correo = $e->getCorreoEmpresa();
+            $direccion = $e->getDireccionEmpresa();
+            $logo = $e->getLogo();
+            $rut = $e->getRut();
+            $camaraComercio = $e->getCamaraComercio();
+
+            // Consulta SQL para insertar la empresa en la base de datos
+            $sql = "INSERT INTO empresa (nit, tipoContribuyente, digitoVerificacion, nombre, telefono, correo, direccion, logo, rut, camaraComercio) 
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            
+            // Preparar la consulta SQL
+            $stmt = $this->getCnx()->prepare($sql);
+
+            // Ejecutar la consulta con los parámetros proporcionados
+            $stmt->execute([$nit, $tipoContribuyente, $digitoVerificacion, $nombre, $telefono, $correo, $direccion, $logo, $rut, $camaraComercio]);
+
+            return true;
+        } else {
+            // Mensaje de error si la conexión es nula
+            echo "La conexión es nula";
             return false;
         }
+    } catch (PDOException $p) {
+        // Manejo de excepciones
+        echo "Error en la inserción: " . $p->getMessage();
+        return false;
     }
+}
     // Método para modificar una empresa en la base de datos
     public function modificar(Empresa $a)
 {
@@ -52,19 +60,24 @@ class DaoEmpresaImp extends Conexion implements DaoEmpresa
         $logo = $a->getLogo();
         $camaraComercio = $a->getCamaraComercio();
         $rut = $a->getRut();
+
         // Consulta SQL para actualizar la empresa en la base de datos
-        $stmt = $this->getCnx()->prepare("UPDATE empresa " .
-            "SET nit = :nit, " .
-            "tipoContribuyente = :tipoContribuyente, " .
-            "digitoVerificacion = :digitoVerificacion, " .
-            "nombre = :nombre, " .
-            "telefono = :telefono, " .
-            "correo = :correo, " .
-            "direccion = :direccion, " .
-            "logo = :logo, " .
-            "rut = :rut, " .
-            "camaraComercio = :camaraComercio " .
-            "WHERE nit = :nitAntiguo");
+        $sql = "UPDATE empresa 
+                SET nit = :nit, 
+                    tipoContribuyente = :tipoContribuyente, 
+                    digitoVerificacion = :digitoVerificacion, 
+                    nombre = :nombre, 
+                    telefono = :telefono, 
+                    correo = :correo, 
+                    direccion = :direccion, 
+                    logo = :logo, 
+                    rut = :rut, 
+                    camaraComercio = :camaraComercio 
+                WHERE nit = :nitAntiguo";
+
+        // Preparar la consulta SQL
+        $stmt = $this->getCnx()->prepare($sql);
+
         // Vincular los parámetros de la consulta
         $stmt->bindParam(':nit', $nit);
         $stmt->bindParam(':tipoContribuyente', $tipoContribuyente);
@@ -77,12 +90,15 @@ class DaoEmpresaImp extends Conexion implements DaoEmpresa
         $stmt->bindParam(':rut', $rut);
         $stmt->bindParam(':camaraComercio', $camaraComercio);
         $stmt->bindParam(':nitAntiguo', $nit);
+
         // Ejecutar la consulta
         $resultado = $stmt->execute();
 
         return $resultado;
     } catch (PDOException $e) {
-        return $e->getMessage() . '***********************';
+        // Manejo de excepciones
+        echo $e->getMessage();
+        return false;
     }
 }
 // Método para eliminar un empleado asociado a una empresa
@@ -117,65 +133,80 @@ public function eliminarEmpleado(Empresa $e){
     }
     // Método para listar todas las empresas
     public function listar()
-    {
-        $lista = null;
-        try {
-            // Preparar la consulta SQL para listar todas las empresas
-            $stmt = $this->getCnx()->prepare("select * from empresa");
-            // Inicializar un array para almacenar la lista de empresas
-            $lista = array();
-            // Ejecutar la consulta
-            $stmt->execute();
-            // Recorrer el resultado de la consulta y crear objetos Empresa
-            foreach ($stmt as $key) {
-                $a = new Empresa(null, null, null, null, null, null, null, null, null, null);
-                $nit = $a->setNit($key['nit']);
-                $direccion = $a->setDireccion($key['direccion']);
-                $telefono = $a->setTelefono($key['telefono']);
-                $correo = $a->setCorreo($key['correo']);
-                $tipoContribuyente = $a->setTipoContribuyente($key['tipoContribuyente']);
-                $digitoVerificacion = $a->setDigitoVerificacion($key['digitoVerificacion']);
-                $logo = $a->setLogo($key['logo']);
-                $rut = $a->setRut($key['rut']);
-                $camaraComercio = $a->setCamaraComercio($key['camaraComercio']);
-                $nombre = $a->setNombreEmpresa($key['nombre']);
-                // Agregar el objeto Empresa al array
-                array_push($lista, $a);
-            }
-            //$this->getCnx()->close();
-        } catch (PDOException $e) {
-            $e->getMessage() . 'error en listar de DaoAprendizImpl';
+{
+    $lista = null;
+    try {
+        // Preparar la consulta SQL para listar todas las empresas
+        $stmt = $this->getCnx()->prepare("SELECT * FROM empresa");
+        // Inicializar un array para almacenar la lista de empresas
+        $lista = array();
+        // Ejecutar la consulta
+        $stmt->execute();
+        // Recorrer el resultado de la consulta y crear objetos Empresa
+        foreach ($stmt as $key) {
+            // Crear un nuevo objeto Empresa con los datos del resultado de la consulta
+            $a = new Empresa(
+                $key['nit'],
+                $key['tipoContribuyente'],
+                $key['digitoVerificacion'],
+                $key['nombre'],
+                $key['telefono'],
+                $key['correo'],
+                $key['direccion'],
+                $key['logo'],
+                $key['rut'],
+                $key['camaraComercio']
+            );
+            // Agregar el objeto Empresa al array
+            array_push($lista, $a);
         }
-        return $lista;
+        //$this->getCnx()->close();
+    } catch (PDOException $e) {
+        // Manejo de excepciones
+        echo $e->getMessage() . ' error en listar de DaoAprendizImpl';
     }
+    return $lista;
+}
     // Método para traer una empresa por su NIT
     public function traer($nit)
-    {
-        try {
-            // Preparar la consulta SQL para obtener una empresa por su NIT
-            $stmt = $this->getCnx()->prepare("select * from empresa where nit = $nit");
-            $lista = array();
-            // Ejecutar la consulta
-            $stmt->execute();
-            // Recorrer el resultado de la consulta y crear un objeto Empresa
-            foreach ($stmt as $key) {
-                $e = new Empresa(null, null, null, null, null, null, null, null, null, null);
-                $nit = $e->setNit($key['nit']);
-                $direccion = $e->setDireccion($key['direccion']);
-                $telefono = $e->setTelefono($key['telefono']);
-                $correo = $e->setCorreo($key['correo']);
-                $tipoContribuyente = $e->setTipoContribuyente($key['tipoContribuyente']);
-                $digitoVerificacion = $e->setDigitoVerificacion($key['digitoVerificacion']);
-                $logo = $e->setLogo($key['logo']);
-                $rut = $e->setRut($key['rut']);
-                $camaraComercio = $e->setCamaraComercio($key['camaraComercio']);
-                $nombre = $e->setNombreEmpresa($key['nombre']);
-                // Devolver el objeto Empresa
-                return $e;
-            }
-            //$this->getCnx()->close();
-        } catch (PDOException $e) {
-            $e->getMessage() . 'error en listar de DaoAprendizImpl';
+{
+    try {
+        // Preparar la consulta SQL para obtener una empresa por su NIT
+        $stmt = $this->getCnx()->prepare("SELECT * FROM empresa WHERE nit = ?");
+        // Vincular el parámetro de la consulta
+        $stmt->bindParam(1, $nit);
+        // Ejecutar la consulta
+        $stmt->execute();
+        
+        // Obtener el resultado de la consulta
+        $key = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($key) {
+            // Crear un nuevo objeto Empresa con los datos del resultado de la consulta
+            $e = new Empresa(
+                $key['nit'],
+                $key['tipoContribuyente'],
+                $key['digitoVerificacion'],
+                $key['nombre'],
+                $key['telefono'],
+                $key['correo'],
+                $key['direccion'],
+                $key['logo'],
+                $key['rut'],
+                $key['camaraComercio']
+            );
+            // Devolver el objeto Empresa
+            return $e;
+        } else {
+            // Si no se encontró ninguna empresa con ese NIT, devolver null o manejar el caso según tu lógica de negocio
+            return null;
         }
+        
+        //$this->getCnx()->close();
+    } catch (PDOException $e) {
+        // Manejo de excepciones
+        echo $e->getMessage() . ' error en traer de DaoAprendizImpl';
+        return null;
     }
+}
 }

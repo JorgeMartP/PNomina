@@ -23,54 +23,65 @@ function validarPDF($archivo, $tamañoMaximo = 1048576, $tiposPermitidos = ["app
         $archivoTemp = $archivo['tmp_name'];
         $carpetaDestino = "../form-data/";
         $rutaCompleta = $carpetaDestino . $nombreArchivo;
+
         // Verifica el tipo de archivo
         if (!in_array($tipoArchivo, $tiposPermitidos)) {
-            echo "Tipo de archivo no permitido. Solo se permiten archivos PDF.";
+            return "Tipo de archivo no permitido. Solo se permiten archivos PDF.";
         }
 
         // Verifica el tamaño del archivo
         if ($tamañoArchivo > $tamañoMaximo) {
             return "El archivo PDF supera el tamaño máximo permitido.";
         }
+
         // Mover el archivo a la carpeta de destino
         if (move_uploaded_file($archivoTemp, $rutaCompleta)) {
             return $rutaCompleta;
         } else {
-            echo "Error al mover el archivo PDF.";
+            return "Error al mover el archivo PDF.";
         }
     } else {
-        echo "No se ha enviado ningún archivo o ocurrió un error en la carga.";
+        return "No se ha enviado ningún archivo o ocurrió un error en la carga.";
     }
 }
-// Función para validar una imagen
+
 function validarImagen($archivo) {
     $nombreArchivo = $archivo['name'];
     $tipoArchivo = $archivo['type'];
     $tamañoArchivo = $archivo['size'];
     $archivoTemp = $archivo['tmp_name'];
     $tiposPermitidos = ['image/jpeg', 'image/png', 'image/gif'];
-    $tamañoMaximo = 3 * 1024 * 1024; 
+    $tamañoMaximo = 3 * 1024 * 1024; // 3 MB
 
-        // Verifica el tipo de archivo
-        if (!in_array($tipoArchivo, $tiposPermitidos)) {
-            echo "Tipo de archivo no permitido.";
-        }
-        // Verifica el tamaño del archivo
-        if ($tamañoArchivo > $tamañoMaximo) {
-            echo "El archivo supera el tamaño máximo permitido.";
-        }
-        // Carpeta de destino para la imagen
-        $carpetaDestino = '../form-Data/';
-        $rutaCompleta = $carpetaDestino . $nombreArchivo;
-        // Mover el archivo a la carpeta de destino
-        if(move_uploaded_file($archivoTemp, $rutaCompleta)){
-            return $rutaCompleta;
-        }
+    // Verifica el tipo de archivo
+    if (!in_array($tipoArchivo, $tiposPermitidos)) {
+        return "Tipo de archivo no permitido. Solo se permiten imágenes JPEG, PNG o GIF.";
+    }
+
+    // Verifica el tamaño del archivo
+    if ($tamañoArchivo > $tamañoMaximo) {
+        return "El archivo de imagen supera el tamaño máximo permitido.";
+    }
+
+    // Carpeta de destino para la imagen
+    $carpetaDestino = '../form-data/';
+    $rutaCompleta = $carpetaDestino . $nombreArchivo;
+
+    // Mover el archivo a la carpeta de destino
+    if (move_uploaded_file($archivoTemp, $rutaCompleta)) {
+        return $rutaCompleta;
+    } else {
+        return "Error al mover el archivo de imagen.";
+    }
 }
+
+
 // Crear una instancia de la clase DaoEmpresaImp
 $dao = new DaoEmpresaImp();
+
 // Listar todas las empresas
 $Empresas = $dao->listar();
+
 // Si se envió el formulario para agregar una empresa
 if(isset($_POST['bottonEm'])){
     $nombreEmpresa = $_POST['nombre'];
@@ -81,51 +92,67 @@ if(isset($_POST['bottonEm'])){
     $tipoContribuyente = $_POST['tipoContribuyente'];
     $digitoVerificacion = $_POST['digitoVerificacion'];
     $rut = $_POST['rut'];
+
     // Verificar si se han proporcionado archivos de imagen y PDF
     if (!empty($_FILES['imagen']['name']) && !empty($_FILES['pdf']['name'])){
         // Validar y guardar la imagen y el PDF
         $logo = validarImagen($_FILES['imagen']);
-        $camaraComercio= validarPDF($_FILES['pdf']);
-        // Crear un objeto Empresa con los datos del formulario y los archivos
-        $e = new Empresa($tipoContribuyente, $digitoVerificacion, $nitEmpresa, $nombreEmpresa, $telefonoEmpresa, $correoEmpresa, $direccionEmpresa,  $logo, $rut, $camaraComercio);
-        // Registrar la empresa en la base de datos
-        $resultado = $dao->registrar($e);
-        // Redireccionar a la página principal si el registro es exitoso
-        if ($resultado == true){
-            header("Location: controladorEmpresa.php");
+        $camaraComercio = validarPDF($_FILES['pdf']);
+
+        // Verificar si hubo errores en la validación de los archivos
+        if (!is_string($logo) && !is_string($camaraComercio)) {
+            // Crear un objeto Empresa con los datos del formulario y los archivos
+            $e = new Empresa($tipoContribuyente, $digitoVerificacion, $nitEmpresa, $nombreEmpresa, $telefonoEmpresa, $correoEmpresa, $direccionEmpresa, $logo, $rut, $camaraComercio);
             
-        }else{
-            // Mostrar un mensaje de error si la empresa ya está registrada
-            echo '<script type="text/javascript">
-                function mostrarAlerta() {
-                    Swal.fire({
-                icon: "warning",
-                title: "Error en el registro",
-                text: "La empresa ya esta registrada"
-                });
+            // Registrar la empresa en la base de datos
+            $resultado = $dao->registrar($e);
+            
+            // Redireccionar a la página principal si el registro es exitoso
+            if ($resultado == true){
+                header("Location: controladorEmpresa.php");
+                exit(); // Importante: terminar la ejecución del script después de redireccionar
+            } else {
+                echo '<script type="text/javascript">
+                        function mostrarAlerta() {
+                            Swal.fire({
+                                icon: "warning",
+                                title: "Error en el registro",
+                                text: "La empresa ya está registrada"
+                            });
+                        }
+                        window.onload = mostrarAlerta;
+                      </script>';
             }
-            window.onload = mostrarAlerta;
-            </script>';
+        } else {
+            // Mostrar mensajes de error si la validación de los archivos falló
+            echo $logo; // Muestra el mensaje de error de la imagen
+            echo $camaraComercio; // Muestra el mensaje de error del PDF
         }
-    }else{
-        echo "Complete todo los campos";
+    } else {
+        echo "Complete todos los campos y seleccione los archivos.";
     }
 }
+
 // Si se envió el ID de una empresa para eliminar
 if(isset($_GET['empresa'])){
     $nit = $_GET['empresa'];
     $empresa = $dao->traer($nit);
+
     // Eliminar todos los empleados asociados a la empresa
     $resultado2 = $dao->eliminarEmpleado($empresa);
-     // Eliminar la empresa de la base de datos
+
+    // Eliminar la empresa de la base de datos
     $resultado = $dao->eliminar($empresa);
+
     // Redireccionar a la página principal si la eliminación es exitosa
-    if ($resultado == true and $resultado2 == true){
+    if ($resultado == true && $resultado2 == true){
         header("Location: controladorEmpresa.php");
-    }else{
-        echo $resultado;
+        exit(); // Importante: terminar la ejecución del script después de redireccionar
+    } else {
+        echo $resultado; // Mostrar mensaje de error si la eliminación falló
     }
 }
+
 ?>    
 </body>
 </html>

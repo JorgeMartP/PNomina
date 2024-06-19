@@ -71,36 +71,37 @@ if (!isset($_SESSION['rol'])) {
     <span id="close-modal-btn">&times;</span>
     <h1>Registrar Empresa</h1>
     <form action="controladorEmpresa.php" id="registration-form" class="form" method="POST" enctype="multipart/form-data">
-        <div class="flex">
-            <div class="form-group">
-                <input type="text" id="nit" name="nit" class="form-input" required>
-                <label for="nit" class="heading">NIT</label>
-            </div>
-            <div class="form-group">
-                <input type="text" id="nombre" name="nombre" class="form-input"  required>
-                <label for="nombre" class="heading">Nombre</label>
-            </div>
+    <div class="flex">
+        <div class="form-group">
+            <input type="text" id="nit" name="nit" class="form-input" required>
+            <label for="nit" class="heading">NIT</label>
         </div>
-        <div class="flex">
-            <div class="form-group">
-                <input type="text" id="direccion" name="direccion" class="form-input" required>
-                <label for="direccion" class="heading">Dirección</label>
-            </div>
-            <div class="form-group">
-                <input type="text" id="telefono" name="telefono" class="form-input" required>
-                <label for="telefono" class="heading">Teléfono</label>
-            </div>
+        <div class="form-group">
+            <input type="text" id="nombre" name="nombre" class="form-input" required>
+            <label for="nombre" class="heading">Nombre</label>
         </div>
-        <div class="flex">
-            <div class="form-group">
-                <input type="email" id="correo" name="correo" class="form-input" required>
-                <label for="correo" class="heading">Correo</label>
-            </div>
-            <div class="form-group">
-                <input type="text" id="tipoContribuyente" name="tipoContribuyente" class="form-input" required>
-                <label for="tipoContribuyente" class="heading">Tipo Contribuyente</label>
-            </div>
+    </div>
+    <div class="flex">
+        <div class="form-group">
+            <input type="text" id="direccion" name="direccion" class="form-input" required>
+            <label for="direccion" class="heading">Dirección</label>
         </div>
+        <div class="form-group">
+            <input type="text" id="telefono" name="telefono" class="form-input" required>
+            <label for="telefono" class="heading">Teléfono</label>
+        </div>
+    </div>
+    <div class="flex">
+        <div class="form-group">
+            <input type="email" id="correo" name="correo" class="form-input" required>
+            <label for="correo" class="heading">Correo</label>
+        </div>
+        <div class="form-group">
+            <input type="text" id="tipoContribuyente" name="tipoContribuyente" class="form-input" required>
+            <label for="tipoContribuyente" class="heading">Tipo Contribuyente</label>
+        </div>
+    </div>
+    <div class="flex">
         <div class="form-group">
             <input type="text" id="rut" name="rut" class="form-input" required>
             <label for="rut" class="heading">Rut</label>
@@ -109,17 +110,18 @@ if (!isset($_SESSION['rol'])) {
             <input type="text" id="digitoVerificacion" name="digitoVerificacion" class="form-input" required>
             <label for="digitoVerificacion" class="heading">Dígito Verificación</label>
         </div>
-        <div class="form-group">
-            <input type="file" id="logo" name="imagen" class="form-input" accept="image/*" required>
-            <label for="logo" class="logo">Logo</label>
-        </div>
-        <div class="form-group">
-            <input type="file" id="camaraComercio" name="pdf" class="form-input" accept=".pdf" required >
-            <label for="camaraComercio" class="logo">Cámara Comercio</label>
-        </div>
-        <!-- Botón de envío del formulario -->
-        <input type="submit" value="Registrar" class="Boton" name="bottonEm">
-    </form>
+    </div>
+    <div class="form-group">
+        <input type="file" id="logo" name="imagen" class="form-input" accept="image/*" required>
+        <label for="logo" class="logo">Logo</label>
+    </div>
+    <div class="form-group">
+        <input type="file" id="camaraComercio" name="pdf" class="form-input" accept=".pdf" required>
+        <label for="camaraComercio" class="logo">Cámara Comercio</label>
+    </div>
+    <!-- Botón de envío del formulario -->
+    <input type="submit" value="Registrar" class="Boton" name="bottonEm">
+</form>
 </div>
 </div>
 <div class="card_cokkies" id="cookieCard">
