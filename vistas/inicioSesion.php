@@ -79,9 +79,9 @@ if (isset($_SESSION["rol"])) {
                         <input type="submit" value="Iniciar Sesión" name="login" name="iniciar">
                     </div>
                     <br>
-                        <a href="recovery.php">¿Olvido la contraseña?</a>
+                        
                     <div class="input-field button">
-                        <a href="../vistas/registrarse.php" class="botton" >Registrarse</a>
+                        <a href="recovery.php">¿Olvido la contraseña?</a>
                     </div>
                 </form>
             </div>

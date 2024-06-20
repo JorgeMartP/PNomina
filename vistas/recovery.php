@@ -65,9 +65,6 @@ if (isset($_SESSION["rol"])) {
                         <input type="submit" value="Recuperar Contraseña" name="login" name="iniciar">
                     </div>
                     <div class="input-field button">
-                        <a href="../vistas/registrarse.php" class="botton">Registrarse</a>
-                    </div>
-                    <div class="input-field button">
                         <a href="../vistas/inicioSesion.php" class="botton">Iniciar Sesión</a>
                     </div>
                 </form>

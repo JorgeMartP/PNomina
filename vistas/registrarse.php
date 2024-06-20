@@ -103,9 +103,6 @@ if (isset($_SESSION["rol"]) || isset($_COOKIE["cookiesRol"])) {
             <div class="input-field button">
                 <input type="submit" value="Registrar" name="registrar">
             </div>
-            <div class="input-field button">
-                <a href="inicioSesion.php" class="botton">Iniciar Sesión</a>
-            </div>
         </form>
     </div>
     <script src="../js/validar.js"></script>
