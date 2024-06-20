@@ -1,0 +1,143 @@
+.form .input-field{
+    position: relative;
+    height: 30px;
+    width: 100%;
+    margin-top: 25px;
+}
+#massage{
+    position: absolute;
+    color: #333;
+    padding-bottom: 10px;
+    font-size: 13px;
+    display: none;
+}
+
+.input-field input, .input-field select {
+    height: 100%;
+    width: 100%;
+    padding: 0 35px;
+    border: none;
+    outline: none;
+    border-bottom: 2px solid #ccc;
+    border-top: 2px solid transparent;
+}
+
+.input-field input:focus, .input-field select:focus {
+    border-bottom-color: #536dfe;
+}
+.input-field select option{
+    color: #999;
+}
+
+
+.input-field i{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 23px;
+    transition: all .2s ease;
+}
+
+.input-field input:focus  ~ i , .input-field select:focus  ~ i{
+    border-bottom-color: #536dfe;
+}
+
+.input-field i.icon{
+    left: 0;
+}
+
+.input-field i.showHipePw{
+    right: 0;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.form .checkbox-text{
+    margin-top: 20px;
+    align-items: center;
+}
+
+.checkbox-text .checkbox-content{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.checkbox-content input{
+    margin: 0 8px -2px 4px;
+    accent-color: #536dfe;
+}
+
+.form .text{
+    color: #333;
+    font-size: 14px;
+}
+
+.form a{
+    color: #536dfe;
+    text-decoration: none;
+}
+.form a:hover{
+    text-decoration: underline;
+}
+
+.form .button{
+    margin-top: 35px;
+}
+
+.form .button input{
+    border: none;
+    color: #fff;
+    font-size: 17px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    border-radius: 6px;
+    background-color: #536dfe;
+    cursor: pointer;
+}
+.button input:hover{
+    background-color: #3c56ee;
+}
+
+.form .login-signup{
+    margin-top: 20px;
+    text-align: center;
+}
+
+.input-field .tooltip{
+    visibility: hidden;
+    width: 300px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; 
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.input-field:hover .tooltip{
+    visibility: visible;
+    opacity: 1;
+}
+.input-field a{
+    padding-top: 20px;
+}
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-moz-inner-spin-button,
+input[type="number"]::-moz-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.flex-Button{
+    display: flex;
+    gap: 20px;
+}

@@ -9,20 +9,10 @@
   <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
   <link rel="stylesheet" href="../styles/cookies.css">
   <link rel="stylesheet" href="../styles/modal.css" />
-
+  <link rel="stylesheet" href="../styles/registrar.css" />
 </head>
 <?php
-include_once('../controlador/controladorUsuario.php');
 
-if (!isset($_SESSION['rol'])) {
-  header("Location: inicioSesion.php");
-  exit();
-} else {
-  if ($_SESSION['rol'] != 3) {
-    header("Location: inicioSesion.php");
-    exit();
-  }
-}
 ?>
 
 <body>
@@ -59,10 +49,20 @@ if (!isset($_SESSION['rol'])) {
   </header>
 
   <section class="containerTable">
-    <div class="button">
-      <h1>Usuarios</h1>
-      <button id="open-modal-btn" class="botton-1">Registrar Usuarios</button>
+  <h1>Usuarios</h1>
+    <div class="flex-Button">
+      <div class="button">
+        
+        <button id="open-modal-btn" class="botton-1">Registrar Usuarios</button>
+      </div>
+      <div class="button">
+        <button id="open-modal-btn" class="botton-1">Modulo Contador</button>
+      </div>
+      <div class="button">
+        <button id="open-modal-btn" class="botton-1">Modulo Recursos Humanos</button>
+      </div>
     </div>
+
     <table>
       <thead>
         <tr>
@@ -96,40 +96,35 @@ if (!isset($_SESSION['rol'])) {
     <div class="modal-content">
       <span id="close-modal-btn">&times;</span>
       <h1>Registrar Usuarios</h1>
-      <form action="controladorEmpleado.php?empresa=<?= $objEmpresa ?>" id="registration-form" class="form" method="POST" enctype="multipart/form-data">
-        <div class="flex">
-          <div class="form-group">
-            <input type="number" id="identificacion" name="identificacion" class="form-input" required>
-            <label for="identificacion" class="heading">N° Identificacion</label>
+      <div class="form signup">
+        <form action="../controlador/controladorUsuario.php" method="post" onsubmit="return validateFormR()">
+          <div id="alert-div"></div>
+          <div class="input-field">
+            <input type="text" placeholder="N° Identificación" name="numIdentificacion" id="num">
+            <i class='bx bxs-id-card icon'></i>
           </div>
-          <div class="form-group">
+          <div class="input-field">
             <select name="tipo" id="ident">
               <option value="">Elige Tipo Identificación</option>
               <option value="CC">CC</option>
               <option value="TI">TI</option>
               <option value="CE">CE</option>
             </select>
-            <label for="nombre" class="heading">Tipo Identificación</label>
+            <i class='bx bxs-id-card icon'></i>
           </div>
-
-        </div>
-        <div class="flex">
-          <div class="form-group">
-            <input type="text" id="nombre" name="nombre" class="form-input" required>
-            <label for="nombre" class="heading">Nombre</label>
+          <div class="input-field">
+            <input type="text" placeholder="Nombre" name="nombreR" id="nombre">
+            <i class='bx bx-user icon'></i>
           </div>
-          <div class="form-group">
-            <input type="text" id="apellido" name="apellido" class="form-input" required>
-            <label for="direccion" class="heading">Apellido</label>
+          <div class="input-field">
+            <input type="text" placeholder="Apellido" name="apellidoR" id="apellido">
+            <i class='bx bx-user icon'></i>
           </div>
-        </div>
-
-        <div class="flex">
-          <div class="form-group">
-            <input type="text" id="correo" name="correo" class="form-input" required>
-            <label for="correo" class="heading">Correo</label>
+          <div class="input-field">
+            <input type="text" placeholder="Correo Electronico" id="email" name="emailR">
+            <i class='bx bx-envelope icon'></i>
           </div>
-          <div class="form-group">
+          <div class="input-field">
             <div class="tooltip">
               <h4>La contraseña debe cumplir con: </h4>
               <ul>
@@ -143,20 +138,22 @@ if (!isset($_SESSION['rol'])) {
             <input type="password" placeholder="Contraseña" name="contraseñaR" class="password" id="password">
             <i class='bx bx-lock-alt icon' id="icon"></i>
             <i class='bx bx-hide showHipePw' id="icon2"></i>
-            <label for="fechaNacimiento" class="logo">Contraseña</label>
+            <p id="massage">La contraseña es <span id="strenght"></span></p>
           </div>
-        </div>
-
-        <div class="form-group">
-          <select name="tipoUsuario" id="tipoUsu">
-            <option value="">Elige Tipo Usuario</option>
-            <option value="1">Jefe RH</option>
-            <option value="2">Contador</option>
-            <option value="3">Administrador</option>
-          </select>
-        </div>
-        <input type="submit" value="Registrar" class="Boton" name="boton">
-      </form>
+          <div class="input-field">
+            <select name="tipoUsuario" id="tipoUsu">
+              <option value="">Elige Tipo Usuario</option>
+              <option value="1">Jefe RH</option>
+              <option value="2">Contador</option>
+              <option value="3">Administrador</option>
+            </select>
+            <i class='bx bx-user icon'></i>
+          </div>
+          <div class="input-field button">
+            <input type="submit" value="Registrar" name="registrar">
+          </div>
+        </form>
+      </div>
     </div>
   </div>
   <div class="card_cokkies" id="cookieCard">
