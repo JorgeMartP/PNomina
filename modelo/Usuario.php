@@ -6,42 +6,48 @@ class Usuario {
     private $apellidoU;
     private $correoU;
     private $contraseña;
-    private $codTipoUsuario;
+    private $codRol;
+    private $codEstadoUsuario;
+    private $resetToken;
+    private $tokenExpiration;
+    private $intentosFallidos;
+    private $cuentaBloqueada;
 
-    private $intentos_fallidos;
-    private $cuenta_bloqueada;
-
-     public function __construct($idUsuario, $tipoDocumento, $nombreU, $apellidoU, $correoU, $contraseña, $codTipoUsuario) {
+    public function __construct(
+        $idUsuario,
+        $tipoDocumento,
+        $nombreU,
+        $apellidoU,
+        $correoU,
+        $contraseña,
+        $codRol,
+        $codEstadoUsuario,
+        $resetToken = null,
+        $tokenExpiration = null,
+        $intentosFallidos = 0,
+        $cuentaBloqueada = 0
+    ) {
         $this->idUsuario = $idUsuario;
         $this->tipoDocumento = $tipoDocumento;
-        $this->nombreU= $nombreU;
+        $this->nombreU = $nombreU;
         $this->apellidoU = $apellidoU;
         $this->correoU = $correoU;
         $this->contraseña = $contraseña;
-        $this->codTipoUsuario = $codTipoUsuario;
+        $this->codRol = $codRol;
+        $this->codEstadoUsuario = $codEstadoUsuario;
+        $this->resetToken = $resetToken;
+        $this->tokenExpiration = $tokenExpiration;
+        $this->intentosFallidos = $intentosFallidos;
+        $this->cuentaBloqueada = $cuentaBloqueada;
     }
+
+    // Métodos getters y setters
     public function getIdUsuario() {
         return $this->idUsuario;
     }
 
     public function setIdUsuario($idUsuario) {
         $this->idUsuario = $idUsuario;
-    }
-
-    public function setIntentos_fallidos($intentos_fallidos){
-        $this->intentos_fallidos = $intentos_fallidos;
-    }
-
-    public function getIntentos_fallidos(){
-        return $this->intentos_fallidos;
-    }
-
-    public function setCuenta_bloqueada($cuenta_bloqueada){
-        $this->cuenta_bloqueada = $cuenta_bloqueada;
-    }
-
-    public function getCuenta_bloqueada(){
-        return $this->cuenta_bloqueada;
     }
 
     public function getTipoDocumento() {
@@ -52,7 +58,6 @@ class Usuario {
         $this->tipoDocumento = $tipoDocumento;
     }
 
-    // Getter y Setter para nombreU
     public function getNombreU() {
         return $this->nombreU;
     }
@@ -61,7 +66,6 @@ class Usuario {
         $this->nombreU = $nombreU;
     }
 
-    // Getter y Setter para apellidoU
     public function getApellidoU() {
         return $this->apellidoU;
     }
@@ -70,7 +74,6 @@ class Usuario {
         $this->apellidoU = $apellidoU;
     }
 
-    // Getter y Setter para correoU
     public function getCorreoU() {
         return $this->correoU;
     }
@@ -79,7 +82,6 @@ class Usuario {
         $this->correoU = $correoU;
     }
 
-    // Getter y Setter para contraseña
     public function getContraseña() {
         return $this->contraseña;
     }
@@ -88,14 +90,52 @@ class Usuario {
         $this->contraseña = $contraseña;
     }
 
-    // Getter y Setter para codTipoUsuario
-    public function getCodTipoUsuario() {
-        return $this->codTipoUsuario;
+    public function getCodRol() {
+        return $this->codRol;
     }
 
-    public function setCodTipoUsuario($codTipoUsuario) {
-        $this->codTipoUsuario = $codTipoUsuario;
+    public function setCodRol($codRol) {
+        $this->codRol = $codRol;
     }
 
+    public function getCodEstadoUsuario() {
+        return $this->codEstadoUsuario;
+    }
 
+    public function setCodEstadoUsuario($codEstadoUsuario) {
+        $this->codEstadoUsuario = $codEstadoUsuario;
+    }
+
+    public function getResetToken() {
+        return $this->resetToken;
+    }
+
+    public function setResetToken($resetToken) {
+        $this->resetToken = $resetToken;
+    }
+
+    public function getTokenExpiration() {
+        return $this->tokenExpiration;
+    }
+
+    public function setTokenExpiration($tokenExpiration) {
+        $this->tokenExpiration = $tokenExpiration;
+    }
+
+    public function getIntentosFallidos() {
+        return $this->intentosFallidos;
+    }
+
+    public function setIntentosFallidos($intentosFallidos) {
+        $this->intentosFallidos = $intentosFallidos;
+    }
+
+    public function getCuentaBloqueada() {
+        return $this->cuentaBloqueada;
+    }
+
+    public function setCuentaBloqueada($cuentaBloqueada) {
+        $this->cuentaBloqueada = $cuentaBloqueada;
+    }
 }
+?>

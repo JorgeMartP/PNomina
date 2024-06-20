@@ -100,7 +100,7 @@ if(isset($_POST['bottonEm'])){
         $camaraComercio = validarPDF($_FILES['pdf']);
 
         // Verificar si hubo errores en la validación de los archivos
-        if (!is_string($logo) && !is_string($camaraComercio)) {
+        if (is_string($logo) && is_string($camaraComercio)) {
             // Crear un objeto Empresa con los datos del formulario y los archivos
             $e = new Empresa($tipoContribuyente, $digitoVerificacion, $nitEmpresa, $nombreEmpresa, $telefonoEmpresa, $correoEmpresa, $direccionEmpresa, $logo, $rut, $camaraComercio);
             
@@ -109,7 +109,7 @@ if(isset($_POST['bottonEm'])){
             
             // Redireccionar a la página principal si el registro es exitoso
             if ($resultado == true){
-                header("Location: controladorEmpresa.php");
+                header("Location: ../vistas/empresa.php");
                 exit(); // Importante: terminar la ejecución del script después de redireccionar
             } else {
                 echo '<script type="text/javascript">

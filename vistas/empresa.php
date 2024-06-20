@@ -70,7 +70,7 @@ if (!isset($_SESSION['rol'])) {
    <div class="modal-content">
     <span id="close-modal-btn">&times;</span>
     <h1>Registrar Empresa</h1>
-    <form action="controladorEmpresa.php" id="registration-form" class="form" method="POST" enctype="multipart/form-data">
+    <form action="../controlador/controladorEmpresa.php" id="registration-form" class="form" method="POST" enctype="multipart/form-data">
     <div class="flex">
         <div class="form-group">
             <input type="text" id="nit" name="nit" class="form-input" required>

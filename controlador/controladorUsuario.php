@@ -14,7 +14,7 @@
     use PHPMailer\PHPMailer\PHPMailer;
     use PHPMailer\PHPMailer\Exception;
     setcookie("intentos", 0, time() + 3600);
-session_start();
+    session_start();
 #VERIFICAMOS QUE SI EXISTE LA VARIABLE CERRAR_SESION SI EXISTE CERRAMOS LA SESION ACTUAL Y ELIMINAMOS LAS COOKIES
 if (isset($_GET['cerrar_sesion'])) {
     setcookie("cookiesrol", "", time() - 2592000, '/');
@@ -51,15 +51,15 @@ function iniciarSesion($correo, $contraseña, $recordar) {
         header("Location: ../vistas/inicioSesion.php");
     } else {
         if (password_verify($contraseña, $traer->getContraseña()) && $correo == $traer->getCorreoU()) {
-            if ($traer->getCuenta_bloqueada()) {
+            if ($traer->getCuentaBloqueada()) {
                 $_SESSION['mensaje'] = "Tu cuenta está bloqueada. Por favor, recupera tu contraseña.";
                 header("Location: ../vistas/inicioSesion.php");
             } else {
                 if ($recordar) {
-                    setcookie("cookiesrol", $traer->getCodTipoUsuario(), time() + 259200, "/", ".localhost", true, true);
+                    setcookie("cookiesrol", $traer->getCodRol(), time() + 259200, "/", ".localhost", true, true);
                     setcookie("cookiesid", $traer->getCorreoU(), time() + 259200, "/", ".localhost", true, true);
                 }
-                $_SESSION['rol'] = $traer->getCodTipoUsuario();
+                $_SESSION['rol'] = $traer->getCodRol();
                 $_SESSION['idUsuario'] = $traer->getCorreoU();
                 $dao->actualizarIntentos($traer->getCorreoU());
                 sesion($_SESSION['rol']);
@@ -72,10 +72,10 @@ function iniciarSesion($correo, $contraseña, $recordar) {
 
 function manejarIntentosFallidos($traer) {
     $dao = new DaoUsuarioImp();
-    $intentos = $traer->getIntentos_fallidos();
+    $intentos = $traer->getIntentosFallidos();
     $intentosT = $intentos + 1;
     $intentosRes = 3 - $intentosT;
-    $traer->setIntentos_fallidos($intentosT);
+    $traer->setIntentosFallidos($intentosT);
 
     if ($intentosT >= 3) {
         if ($dao->bloquearCuenta($traer->getCorreoU())) {
@@ -93,7 +93,7 @@ function manejarIntentosFallidos($traer) {
 function registrarUsuario($tipoIdent, $numDoc, $nombre, $apellido, $correo, $contraseña, $tipoUsu) {
     $dao = new DaoUsuarioImp();
     $password_hasheada = password_hash($contraseña, PASSWORD_DEFAULT);
-    $usuario = new Usuario($numDoc, $tipoIdent, $nombre, $apellido, $correo, $password_hasheada, $tipoUsu);
+    $usuario = new Usuario($numDoc, $tipoIdent, $nombre, $apellido, $correo, $password_hasheada, $tipoUsu, 1);
 
     if (!$dao->confirCorreo($correo)) {
         $_SESSION['mensaje'] = "Usuario registrado correctamente. Por favor, inicie sesión.";
